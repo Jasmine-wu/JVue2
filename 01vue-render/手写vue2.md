@@ -62,9 +62,25 @@ let render = new Function(`with(this){return ${code}}`)
 - 通过父节点，删除el
 
 vm.$el = 新创建的真实dom
+
+
+
 ## 5.2 diff时，只替换发生了更新的真实dom
-# 6. 使用观察者模式，收集属性的变化，
-- 一个属性有一个dep收集者
-- 每个组件有一个watcher
-- dep用来收集依赖watcher
-当前watcher是哪个实例
+# 6. 使用观察者模式，收集属性的依赖,自动精准更新
+
+实现自动更新：
+
+	- 给每个属性添加一个dep收集者，用来收集依赖watcher
+	- 在watcher里封装渲染逻辑（vm.__update(vm._render())）
+	- 一旦属性变化，找到对应的dep里存放的watcher进行重新渲染
+
+关键点：如何watcher和dep关联起来呢？
+
+- watcher执行当前渲染逻辑之前，将Dep.target = this;, 在当前渲染逻辑执行完之后Dep.target =null，置空
+
+注意：
+
+- 每个组件有一个watcher实例（好处：可以实现局部更新）
+
+- 只有模版中使用到的属性才收集依赖
+

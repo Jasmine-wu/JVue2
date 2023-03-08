@@ -1,5 +1,5 @@
 import { newArrayProto } from "./array";
-
+import Dep from "./dep";
 class Observer {
   constructor(data) {
     // 将observer实例绑定到data的自定义属性__obj__上
@@ -42,9 +42,18 @@ class Observer {
 export function defineReactive(target, key, value) {
   // 如果你的value值是对象
   observe(value);
-  //
+
+  // 每个响应式数据都有一个dep,用来收集它的依赖watcher
+  let dep = new Dep();
+
   Object.defineProperty(target, key, {
     get() {
+      console.log(dep.target);
+      if (Dep.target) {
+        // 首次渲染时，对用到的属性收集依赖watcher
+        dep.depend();
+      }
+
       // console.log(`${key}属性值被获取了`);
       return value;
     },
@@ -55,6 +64,9 @@ export function defineReactive(target, key, value) {
       // 如果你设置的值是对象，需要对这个对象也进行劫持
       observe(newValue);
       value = newValue;
+
+      // 当属性发生变化时，通知更新
+      dep.notify();
     },
   });
 }

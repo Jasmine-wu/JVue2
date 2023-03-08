@@ -48,8 +48,8 @@ export function initMixin(Vue) {
       //
     }
 
-    // 2.挂载组件
-    // 组件挂载跟初始渲染时根实例挂载
+    // 2.组件挂载
+    // 组件挂载以及初始渲染时根实例挂载
     mountComponent(vm, el);
   };
 }
