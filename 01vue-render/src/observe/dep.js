@@ -8,7 +8,6 @@ class Dep {
   }
   depend() {
     // 让watcher关联dep
-    console.log("d", this);
     Dep.target.addDep(this);
     // Dep.target && this.subs.push(Dep.target);
   }

@@ -48,17 +48,15 @@ export function defineReactive(target, key, value) {
 
   Object.defineProperty(target, key, {
     get() {
-      console.log(dep.target);
       if (Dep.target) {
-        // 首次渲染时，对用到的属性收集依赖watcher
+        // 对使用了属性进行依赖收集
         dep.depend();
       }
-
       // console.log(`${key}属性值被获取了`);
       return value;
     },
     set(newValue) {
-      // console.log(`${key}属性值被设置了：${newValue}`);
+      // console.log(`11${key}属性值被设置了：${newValue}`);
 
       if (newValue === value) return;
       // 如果你设置的值是对象，需要对这个对象也进行劫持
