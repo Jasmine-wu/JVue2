@@ -12,6 +12,10 @@ function proxy(vm, target, key) {
     get() {
       return vm[target][key];
     },
+    // fix bug: 通过vm.a给属性设置新值，数据没有更新的问题
+    set(newValue) {
+      vm[target][key] = newValue;
+    },
   });
 }
 
@@ -20,7 +24,7 @@ function initData(vm) {
   vm._data = data;
   // vue2 Vue实例可以是对象也可以是函数，组件实例必须是函数
   // vue3 Vue实例必须是函数
-  data = typeof data === "function" ? data.call(vm) : data; 
+  data = typeof data === "function" ? data.call(vm) : data;
 
   observe(data);
 
