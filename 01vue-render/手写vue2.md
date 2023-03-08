@@ -66,21 +66,32 @@ vm.$el = 新创建的真实dom
 
 
 ## 5.2 diff时，只替换发生了更新的真实dom
-# 6. 使用观察者模式，收集属性的依赖,自动精准更新
+# 6. 当数据变化时，自动更新视图 - 观察者模式
+
+
 
 实现自动更新：
 
-	- 给每个属性添加一个dep收集者，用来收集依赖watcher
-	- 在watcher里封装渲染逻辑（vm.__update(vm._render())）
-	- 一旦属性变化，找到对应的dep里存放的watcher进行重新渲染
+- 每个组件对应一个watcher。
+  - 当组件（或根实例）初渲染时，new watcher(), 内部会记录下当前watcher，Dep.target = this, 并调用渲染逻辑，渲染完成再置空
 
-关键点：如何watcher和dep关联起来呢？
+	- 给每个属性添加一个dep收集者，只收集模版中使用了属性（get方法中）的依赖watcher
+	- 在watcher封装渲染逻辑（vm.__update(vm._render())）
+	- 一旦属性变化（set方法），通知对应的dep里存放的watcher更新（重新渲染）
 
-- watcher执行当前渲染逻辑之前，将Dep.target = this;, 在当前渲染逻辑执行完之后Dep.target =null，置空
+关键点：如何watcher和dep互相关联起来呢？
 
-注意：
+- 在watcher里的渲染逻辑之前，将Dep.target = this;,记录当前watcher， 在当前渲染逻辑执行完之后Dep.target =null，置空
 
-- 每个组件有一个watcher实例（好处：可以实现局部更新）
+- 在属性被使用时候（get），收集依赖时,dep.depend()
+  - depend(): 调用Dep.target.addDep(this), 在watcher里,放dep放到deps数组中，并调用dep里的addSubs将watcher放到到dep的subs数组中
 
-- 只有模版中使用到的属性才收集依赖
+# 优化：异步更新数据，实现数据更新批处理
+前面的缺点： 每次数据变化(set)，都会重新更新视图（render）
+优化：一个组件只有一个watcher，将组件内每次数据变化缓存起来，数据更新完毕，再调用一次watcher的渲染逻辑进行视图更新
+效果：不管你组件内，修改了多少次属性，都只会刷新一次视图。
 
+原理：每次数据更新发生时，用一个数组缓存watcher，开一个异步任务nextTick, 依次执行wathcer里的渲染逻辑
+
+## $nextTick实现
+将nextTick里的回调函数放到一个队列里，开一个异步任务（Promise=> MutationObserver->setImediate->setTimeout异步任务语法降级出炉-为了兼容IE），在里面依次执行回调函数

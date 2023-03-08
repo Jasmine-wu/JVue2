@@ -63,7 +63,6 @@ export function initLifeCicle(Vue) {
     // 根据虚拟dom创建真实dom，并替换$el
     vm.$el = patch(el, vnode);
 
-    // console.log("数据更新xxx2:", vnode);
   };
 
   // _c(div): 表示要创建虚拟元素节点

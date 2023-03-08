@@ -1,11 +1,13 @@
 import { initMixin } from "./init";
 import { initLifeCicle } from "./lifeCicle";
-function Vue(options) {
-    this._init(options);
+import { nextTick } from "./observe/watcher";
 
+function Vue(options) {
+  this._init(options);
 }
+Vue.prototype.$nextTick = nextTick;
 
 initMixin(Vue);
-initLifeCicle(Vue)
+initLifeCicle(Vue);
 
 export default Vue;
