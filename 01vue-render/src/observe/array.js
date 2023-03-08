@@ -20,7 +20,7 @@ methods.forEach((method) => {
   newArrayProto[method] = function (...args) {
     // 1.劫持数组方法
     const result = oldArrayProto[method].call(this, ...args);
-    console.log("array method:", method);
+    // console.log("array method:", method);
 
     let inserted;
     // 劫持数组方法以后，对通过数组方法新增的内容进行劫持
