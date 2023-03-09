@@ -1,5 +1,6 @@
 import { initMixin } from "./init";
-import { initLifeCicle } from "./lifeCicle";
+import { initLifeCicle } from "./lifecycle";
+import { initGlobalAPI } from "./gloablAPI";
 import { nextTick } from "./observe/watcher";
 
 function Vue(options) {
@@ -9,5 +10,6 @@ Vue.prototype.$nextTick = nextTick;
 
 initMixin(Vue);
 initLifeCicle(Vue);
+initGlobalAPI(Vue);
 
 export default Vue;

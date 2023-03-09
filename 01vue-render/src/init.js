@@ -1,20 +1,27 @@
 import { initState } from "./state";
 import { compileToFunction } from "./compile/index";
-import { mountComponent } from "./lifeCicle";
+import { callHook, mountComponent } from "./lifecycle";
+import { mergeOptions } from "./utils";
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
     const vm = this;
     vm.$options = options;
 
+    // 我们定义的全局指令和过滤器.... 都会挂载到实力上
+    vm.$options = mergeOptions(this.constructor.options, options); // 将用户的选项挂载到实例上
+
+    callHook(vm, "beforeCreate"); // 内部调用的是beforeCreate 写错了就不执行了
+
     // 1.data数据劫持
     initState(vm);
+    callHook(vm, "created");
 
     // 2.实现挂载
     if (options.el) {
       vm.$mount(options.el);
     }
 
-    // 
+    //
   };
 
   Vue.prototype.$mount = function (el) {

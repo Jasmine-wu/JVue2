@@ -95,3 +95,6 @@ vm.$el = 新创建的真实dom
 
 ## $nextTick实现
 将nextTick里的回调函数放到一个队列里，开一个异步任务（Promise=> MutationObserver->setImediate->setTimeout异步任务语法降级出炉-为了兼容IE），在里面依次执行回调函数
+
+# mixin混入的实现
+Vue实例options和用户mixin 混入的选项的合并，先执行mixin混入的再执行Vue实例的options

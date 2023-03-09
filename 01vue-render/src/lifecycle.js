@@ -92,3 +92,10 @@ export function mountComponent(vm, el) {
   // 2.根据虚拟dom创建dom
   // 3.vm.$el = 真实dom
 }
+
+export function callHook(vm,hook){ // 调用钩子函数
+  const handlers = vm.$options[hook];
+  if(handlers){
+      handlers.forEach(handler=>handler.call(vm))
+  }
+}
