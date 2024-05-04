@@ -2,15 +2,14 @@
 
 # 2. Vue响应式原理实现
 ## 2.1.data对象属性劫持
-   1. 如果你新设置的值是对象
-   2. 如果你的data属性值是对象
-   3. 通过vm.属性值直接获取
-## 2.2. 实现对数组的劫持
-
-### 2.2.1. 劫持数组方法，通过劫持7个能改变原数组的数组方法,concat/slice不会改变原数组=》函数劫持
-### 2.2.2. 劫持数组方法以后，对通过数组方法新增的数组成员也进行响应式处理
-### 2.2.3. 数组成员里有对象，则也需要劫持
-### 2.2.4. 解决死循环问题,,使用Object.defineProperty 定义对象属性是不可枚举
+- 1. 如果你新设置的值是对象。
+- 2. 如果你的data属性值是对象。
+- 3. 通过vm.属性值直接获取。
+## 2.2.实现对数组的劫持
+- 1. 劫持数组方法，通过劫持7个能改变原数组的数组方法,concat/slice不会改变原数组=》函数劫持
+- 2. 劫持数组方法以后，对通过数组方法新增的数组成员也进行响应式处理
+- 3. 数组成员里有对象，则也需要劫持
+- 4. 解决死循环问题,,使用Object.defineProperty 定义对象属性是不可枚举
 # 3. 组件渲染和更新的流程
 ## 3.1 初次渲染：
 ### 3.1.1 组件实例初始化。-> 触发beforeCreated生命周期函数。
@@ -33,7 +32,7 @@ let render = new Function(`with(this){return ${code}}`)
 #### 3.1.2.1 执行render方法，返回虚拟dom。
 - vm._render();
   ```js
-  // h函数也就是createElement函数。
+   // h函数也就是createElement函数。
   Vue.component('my-component', {
   render(h) {
     return h('div', { attrs: { id: 'app' } }, [
@@ -42,7 +41,7 @@ let render = new Function(`with(this){return ${code}}`)
     ]);
   }
 });
-```
+  ```
 #### 3.1.2.2 根据虚拟dom创建真实dom,并将真实dom挂载到$el上。
 - 渲染逻辑：vm.__update(vm._render())。根据模版生成虚拟dom再替换成真实dom。
 - vm.$el = 新创建的真实dom。
