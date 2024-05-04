@@ -40,8 +40,7 @@ let render = new Function(`with(this){return ${code}}`)
       h('p', 'This is a paragraph.')
     ]);
   }
-});
-  ```
+});```
 #### 3.1.2.2 根据虚拟dom创建真实dom,并将真实dom挂载到$el上。
 - 渲染逻辑：vm.__update(vm._render())。根据模版生成虚拟dom再替换成真实dom。
 - vm.$el = 新创建的真实dom。
@@ -71,7 +70,6 @@ let render = new Function(`with(this){return ${code}}`)
 - 在watcher里的渲染逻辑之前，将Dep.target = this;,记录当前watcher， 在当前渲染逻辑执行完之后Dep.target =null，置空
 - 在属性被使用时候（get），收集依赖时,dep.depend()
   - depend(): 调用Dep.target.addDep(this), 在watcher里,放dep放到deps数组中，并调用dep里的addSubs将watcher放到到dep的subs数组中
-
 
 # 4. $nextTick实现
 将nextTick里的回调函数放到事件循环队列里，即开启一个异步任务（Promise=> MutationObserver->setImediate->setTimeout异步任务语法降级出炉-为了兼容IE），在里面依次执行回调函数。
